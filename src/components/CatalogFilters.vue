@@ -32,8 +32,9 @@ const groups = computed(() => [
     options: props.filters?.statuses ?? [],
   },
 ] as const)
+// 年份在当前年代内从小到大排列。
 const yearCells = computed(() =>
-  Array.from({ length: 10 }, (_, index) => decade.value + 9 - index).filter((year) => year > 0),
+  Array.from({ length: 10 }, (_, index) => decade.value + index).filter((year) => year > 0),
 )
 const yearToDecade = (year: number) => Math.floor(year / 10) * 10
 

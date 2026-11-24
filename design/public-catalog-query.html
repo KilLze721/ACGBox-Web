@@ -517,7 +517,8 @@
     };
     const facets = ['type','adaptation','status','year'];
     const keys = ['q',...facets,'sort','page'];
-    const pageSize = 8;
+    // 公开目录统一每页展示 20 条。
+    const pageSize = 20;
     const personalKey = 'acgbox-public-catalog-personal';
     const personal = { signedIn:false, favorites:{}, ratings:{} };
     try {
@@ -767,7 +768,8 @@
       const group = (key,body) => `<section class="facet" aria-labelledby="label-${key}"><h3 id="label-${key}">${view[key] || '标签'}</h3>${body}</section>`;
       const singles = facets.slice(0,3).map(key => group(key, '<div class="options">' +
         ['',...choices(state.view,key)].map(value => option(key,value,value || '全部',state[key] === value)).join('') + '</div>'));
-      const years = Array.from({length:10},(_,i) => String(decade + 9 - i));
+      // 年份在当前年代内从小到大排列。
+      const years = Array.from({length:10},(_,i) => String(decade + i));
       const yearOptions = [
         option('year','','全部',!state.year,'全部年份'),
         ...years.map(value => option('year',value,value,state.year === value)),

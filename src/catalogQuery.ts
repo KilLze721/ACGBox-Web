@@ -12,10 +12,10 @@ export interface CatalogQuery {
   tagIds: number[]
   sort: CatalogSort
   pageNum: number
-  pageSize: number
 }
 
-const defaultPageSize = 8
+// 公开目录统一每页 20 条，旧链接中的每页条数不参与查询。
+const defaultPageSize = 20
 const sortFields = {
   new: { sortBy: 'DATE', sortDirection: 'DESC' },
   old: { sortBy: 'DATE', sortDirection: 'ASC' },
@@ -39,7 +39,6 @@ function integer(value: string, min = 1) {
 // URL 是已应用条件的来源，保留可分享的筛选组合并去重重复标签。
 export function readCatalogQuery(kind: CatalogKind, query: LocationQuery): CatalogQuery {
   const year = first(query.year)
-  const pageSize = integer(first(query.pageSize))
   return {
     keyword: first(query.keyword).trim(),
     typeId: integer(first(query[typeKey(kind)])),
@@ -52,7 +51,6 @@ export function readCatalogQuery(kind: CatalogKind, query: LocationQuery): Catal
     }))],
     sort: query.sortBy === 'NAME' ? 'name' : query.sortDirection === 'ASC' ? 'old' : 'new',
     pageNum: integer(first(query.pageNum)) ?? 1,
-    pageSize: pageSize && pageSize <= 100 ? pageSize : defaultPageSize,
   }
 }
 
@@ -66,7 +64,6 @@ export function catalogRouteQuery(kind: CatalogKind, query: CatalogQuery): Locat
     tagIds: query.tagIds.length ? query.tagIds : undefined,
     ...(query.sort === 'new' ? {} : sortFields[query.sort]),
     pageNum: query.pageNum === 1 ? undefined : query.pageNum,
-    pageSize: query.pageSize === defaultPageSize ? undefined : query.pageSize,
   }
 }
 
@@ -74,7 +71,7 @@ export function catalogRequestQuery(kind: CatalogKind, query: CatalogQuery) {
   const result = new URLSearchParams({
     ...sortFields[query.sort],
     pageNum: String(query.pageNum),
-    pageSize: String(query.pageSize),
+    pageSize: String(defaultPageSize),
   })
   for (const [key, raw] of Object.entries(catalogRouteQuery(kind, query))) {
     if (raw === undefined || raw === null) continue
