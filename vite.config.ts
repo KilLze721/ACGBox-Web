@@ -21,7 +21,8 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
-    server: { port: 5174, strictPort: true, proxy },
+    // 用户端开发服务使用独立端口，便于与管理端同时运行。
+    server: { port: 5175, strictPort: true, proxy },
     preview: { port: 4174, strictPort: true, proxy },
   }
 })
