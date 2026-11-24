@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 
-// 沿用原型的存储键与夜晚默认值，存储不可用时仍可切换。
+// 只有明确保存的夜晚优先于白天默认值，存储不可用时仍可切换。
 const themeKey = 'acgbox-public-catalog-theme'
 
 function readTheme(): 'day' | 'night' {
   try {
-    return localStorage.getItem(themeKey) === 'day' ? 'day' : 'night'
+    return localStorage.getItem(themeKey) === 'night' ? 'night' : 'day'
   } catch {
-    return 'night'
+    return 'day'
   }
 }
 

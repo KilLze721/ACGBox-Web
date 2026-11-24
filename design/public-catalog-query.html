@@ -1,29 +1,32 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="day">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="light">
   <title>动画查询 · ACGBox</title>
   <script>
     const themeKey = 'acgbox-public-catalog-theme';
+    // 样式加载前只恢复手选夜晚，其他情况使用默认白天主题。
     try {
-      if (localStorage.getItem(themeKey) === 'day') document.documentElement.dataset.theme = 'day';
+      if (localStorage.getItem(themeKey) === 'night') {
+        document.documentElement.dataset.theme = 'night';
+        document.querySelector('meta[name="color-scheme"]').content = 'dark';
+      }
     } catch {
       // 浏览器禁用本地存储时，仍可在本次访问中切换主题。
     }
   </script>
 <style>
     :root {
-      color-scheme:dark;
-      --night:#1a181b; --ink:#f3edef; --muted:#c0b5ba;
-      --surface:#222024; --raised:#29262a; --line:#463e44; --hover:#343036;
-      --lilac:#f0c1d2; --accent-fill:#f2bed0; --accent-ink:#372b30; --selected:#373037;
-      --accent-line:#b8879c; --focus:#e4a9c0;
-
+      color-scheme:light;
+      --night:#fff; --ink:#342c35; --muted:#655b66;
+      --surface:#fff; --raised:#fdf8fb; --line:#eadfe8; --hover:#fceff6;
+      --lilac:#70435a; --accent-fill:#f9cee4; --accent-ink:#392c37; --selected:#fae6f1;
+      --accent-line:#d58aaf; --focus:#ad5b84;
       --content-width:1080px;
       --radius-panel:18px; --radius-control:10px;
-      --corner:#3b2937; --float-shadow:0 3px 12px #0b080e24;
+      --corner:#f9e1ef; --float-shadow:0 3px 12px #7b44600a;
       --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",serif;
       --sans:"IBM Plex Sans","PingFang SC","Microsoft YaHei",sans-serif;
     }
@@ -213,13 +216,13 @@
     .score-option input { position:absolute; width:1px; height:1px; opacity:0 }
     .score-option:focus-within { outline:2px solid var(--focus); outline-offset:2px }
     .score-option:has(:checked) { background:var(--selected); border-color:var(--accent-line); color:var(--ink); font-weight:700 }
-    [data-theme=day] {
-      color-scheme:light;
-      --night:#fcfafc; --ink:#342c35; --muted:#655b66;
-      --surface:#fff; --raised:#fdf8fb; --line:#eadfe8; --hover:#fceff6;
-      --lilac:#70435a; --accent-fill:#f9cee4; --accent-ink:#392c37; --selected:#fae6f1;
-      --accent-line:#d58aaf; --focus:#ad5b84;
-      --corner:#f9e1ef; --float-shadow:0 3px 12px #7b44600a;
+    [data-theme=night] {
+      color-scheme:dark;
+      --night:#1a181b; --ink:#f3edef; --muted:#c0b5ba;
+      --surface:#222024; --raised:#29262a; --line:#463e44; --hover:#343036;
+      --lilac:#f0c1d2; --accent-fill:#f2bed0; --accent-ink:#372b30; --selected:#373037;
+      --accent-line:#b8879c; --focus:#e4a9c0;
+      --corner:#3b2937; --float-shadow:0 3px 12px #0b080e24;
     }
     @media (width > 720px) {
       .sidebar {
@@ -294,7 +297,7 @@
       </nav>
       <div class="header-actions">
         <span class="sample">演示资料库</span>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="白天主题" aria-pressed="false" title="当前为夜晚，切换到白天">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="白天主题" aria-pressed="true" title="当前为白天，切换到夜晚">
           <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 15.2a8.8 8.8 0 0 1-11.8-11.8A8.8 8.8 0 1 0 20.6 15.2Z"/><path d="M17.5 3v5m-2.5-2.5h5"/></svg>
           <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
         </button>

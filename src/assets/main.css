@@ -1,5 +1,26 @@
-/* 复用目录原型的暖灰与粉色主题，夜晚是首次访问时的默认外观。 */
+/* 首屏默认白底，浅粉强调色与夜晚配色沿用目录样式。 */
 :root {
+  color-scheme: light;
+  --canvas: #fff;
+  --ink: #342c35;
+  --muted: #655b66;
+  --surface: #fff;
+  --line: #eadfe8;
+  --hover: #fceff6;
+  --accent: #70435a;
+  --selected: #fae6f1;
+  --focus: #ad5b84;
+  --corner: #f9e1ef;
+  --catalog-raised: #fdf7fa;
+  --catalog-accent-fill: #f9cee4;
+  --catalog-accent-line: #cc92b0;
+  --float-shadow: 0 3px 12px #7b44600a;
+  --content-width: 1080px;
+  --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, serif;
+  --sans: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+:root[data-theme='night'] {
   color-scheme: dark;
   --canvas: #1a181b;
   --ink: #f3edef;
@@ -15,27 +36,6 @@
   --catalog-accent-fill: #f2bed0;
   --catalog-accent-line: #bb839a;
   --float-shadow: 0 3px 12px #0b080e24;
-  --content-width: 1080px;
-  --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, serif;
-  --sans: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-}
-
-:root[data-theme='day'] {
-  color-scheme: light;
-  --canvas: #fcfafc;
-  --ink: #342c35;
-  --muted: #655b66;
-  --surface: #fff;
-  --line: #eadfe8;
-  --hover: #fceff6;
-  --accent: #70435a;
-  --selected: #fae6f1;
-  --focus: #ad5b84;
-  --corner: #f9e1ef;
-  --catalog-raised: #fdf7fa;
-  --catalog-accent-fill: #f9cee4;
-  --catalog-accent-line: #cc92b0;
-  --float-shadow: 0 3px 12px #7b44600a;
 }
 
 * {
