@@ -29,6 +29,10 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 npm install
 ```
 
+公开目录使用同源的 `/api/web/anime` 与 `/api/web/book`，浏览无需登录。Vite 开发端口为 `5174`，预览端口为 `4174`。两者默认将公开请求转发至 `http://localhost:8080`，并在转发时去掉 `/api`。需要使用其他本地或测试后端时，可在 `.env.local` 设置 `ACGBOX_API_TARGET`。
+
+部署构建产物时，服务端需将 `/anime`、`/book` 回退至 `index.html`，并将 `/api/web/*` 转发至后端的 `/web/*`。
+
 ### Compile and Hot-Reload for Development
 
 ```sh

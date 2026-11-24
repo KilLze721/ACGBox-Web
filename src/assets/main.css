@@ -11,6 +11,9 @@
   --selected: #373037;
   --focus: #e4a9c0;
   --corner: #3b2937;
+  --catalog-raised: #29262a;
+  --catalog-accent-fill: #f2bed0;
+  --catalog-accent-line: #bb839a;
   --float-shadow: 0 3px 12px #0b080e24;
   --content-width: 1080px;
   --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, serif;
@@ -29,6 +32,9 @@
   --selected: #fae6f1;
   --focus: #ad5b84;
   --corner: #f9e1ef;
+  --catalog-raised: #fdf7fa;
+  --catalog-accent-fill: #f9cee4;
+  --catalog-accent-line: #cc92b0;
   --float-shadow: 0 3px 12px #7b44600a;
 }
 

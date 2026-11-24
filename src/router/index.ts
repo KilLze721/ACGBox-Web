@@ -4,6 +4,8 @@ import CatalogView from '@/views/CatalogView.vue'
 // 目录使用可直接访问的历史路由，根路径统一进入动画目录。
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  // 前进后退恢复原滚动位置，目录内更新查询时保留当前筛选面板位置。
+  scrollBehavior: (to, from, saved) => saved ?? (to.path !== from.path ? { top: 0 } : undefined),
   routes: [
     { path: '/', redirect: { name: 'anime' } },
     {
