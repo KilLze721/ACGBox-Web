@@ -402,6 +402,48 @@
   padding-inline: 8px;
 }
 
+/* 跳页作为一组随分页栏换行，错误提示显示在输入下方。 */
+.catalog-page-jump,
+.catalog-page-jump-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.catalog-page-jump {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.catalog-page-jump-label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.catalog-page-input {
+  width: 56px;
+  min-height: 36px;
+  padding: 3px 5px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  text-align: center;
+}
+
+.catalog-page-input[aria-invalid='true'] {
+  border-color: var(--catalog-accent-line);
+}
+
+.catalog-page-jump-error {
+  flex-basis: 100%;
+  color: var(--accent);
+  font-size: 12px;
+  text-align: center;
+}
+
 @media (width > 720px) {
   .catalog-sidebar {
     position: sticky;

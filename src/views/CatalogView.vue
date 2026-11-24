@@ -16,6 +16,9 @@ const query = computed(() => readCatalogQuery(props.kind, route.query))
 const keyword = ref(query.value.keyword)
 const resultsTitle = ref<HTMLElement>()
 const page = ref<CatalogPage>()
+const pageJump = ref(String(query.value.pageNum))
+const pageJumpError = ref('')
+const changingPage = ref(false)
 const filters = ref<Filters>()
 const listLoading = ref(true)
 const listError = ref(false)
@@ -57,6 +60,12 @@ const pageNumbers = computed(() => {
 })
 
 watch([() => props.kind, () => query.value.keyword], () => { keyword.value = query.value.keyword })
+
+// 翻页、刷新或恢复历史条件后，让输入框显示当前页。
+watch([() => route.fullPath, () => page.value?.pageNum], () => {
+  pageJump.value = String(page.value?.pageNum ?? query.value.pageNum)
+  pageJumpError.value = ''
+})
 
 // 目录列表与筛选项独立读取，切换路由时取消旧请求，避免旧结果覆盖新条件。
 watch([() => props.kind, () => route.fullPath, retryList], async ([kind], _, onCleanup) => {
@@ -111,9 +120,30 @@ function clearQuery() {
 }
 
 async function goToPage(pageNum: number) {
-  await changeQuery({ pageNum })
-  await nextTick()
-  resultsTitle.value?.focus()
+  if (changingPage.value || listLoading.value || pageNum === page.value?.pageNum) return
+  // 路由更新前就锁定翻页操作，避免连续提交触发重复导航。
+  changingPage.value = true
+  try {
+    await changeQuery({ pageNum })
+    await nextTick()
+    resultsTitle.value?.focus()
+  } finally {
+    changingPage.value = false
+  }
+}
+
+function submitPageJump() {
+  if (!page.value || changingPage.value || listLoading.value) return
+  const input = pageJump.value.trim()
+  const target = Number(input)
+  const last = page.value.pages
+  if (!/^\d+$/.test(input) || !Number.isSafeInteger(target) || target < 1 || target > last) {
+    pageJumpError.value = `请输入 1 到 ${last} 之间的整数页码。`
+    return
+  }
+  pageJumpError.value = ''
+  pageJump.value = String(target)
+  return goToPage(target)
 }
 
 function workStatus(status: number) {
@@ -223,7 +253,7 @@ function workStatus(status: number) {
             type="button"
             class="catalog-quiet catalog-page-button"
             aria-label="上一页"
-            :disabled="page.pageNum <= 1"
+            :disabled="page.pageNum <= 1 || changingPage"
             @click="goToPage(page.pageNum - 1)"
           >‹</button>
           <template v-for="number in pageNumbers" :key="number">
@@ -233,6 +263,7 @@ function workStatus(status: number) {
               type="button"
               :aria-label="`第 ${number} 页`"
               :aria-current="number === page.pageNum ? 'page' : undefined"
+              :disabled="changingPage"
               @click="goToPage(number)"
             >{{ number }}</button>
             <span v-else aria-hidden="true">…</span>
@@ -241,9 +272,31 @@ function workStatus(status: number) {
             type="button"
             class="catalog-quiet catalog-page-button"
             aria-label="下一页"
-            :disabled="page.pageNum >= page.pages"
+            :disabled="page.pageNum >= page.pages || changingPage"
             @click="goToPage(page.pageNum + 1)"
           >›</button>
+          <form class="catalog-page-jump" @submit.prevent="submitPageJump">
+            <label class="catalog-page-jump-label">
+              跳至
+              <input
+                v-model="pageJump"
+                class="catalog-page-input"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                aria-label="跳转页码"
+                :aria-invalid="pageJumpError ? 'true' : undefined"
+                :aria-describedby="pageJumpError ? 'catalog-page-jump-error' : undefined"
+                :disabled="changingPage"
+                @input="pageJumpError = ''"
+              >
+              页
+            </label>
+            <button class="catalog-quiet" type="submit" :disabled="changingPage">跳转</button>
+            <p v-if="pageJumpError" id="catalog-page-jump-error" class="catalog-page-jump-error" role="alert">
+              {{ pageJumpError }}
+            </p>
+          </form>
         </nav>
       </template>
     </section>
